@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        createStars(200); // Создаем звезды
+        createStars(101); // Создаем звезды
         setInterval(createFallingStar, 2000); // Генерируем падающие звезды
     }
 
