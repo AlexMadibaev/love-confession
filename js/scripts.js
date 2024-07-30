@@ -18,15 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
         "И наконец"
     ];
 
-    let textIndex = 0;
     const contentDiv = document.getElementById('content');
     const backgroundMusic = document.getElementById('background-music');
+    let textIndex = 0;
 
     // Установить первое сообщение сразу при загрузке страницы
     contentDiv.textContent = textArray[textIndex];
 
-    document.body.addEventListener('click', function() {
-        // Уменьшаем непрозрачность перед сменой текста
+    document.body.addEventListener('click', () => {
         contentDiv.style.opacity = '0';
 
         setTimeout(() => {
@@ -35,10 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 contentDiv.textContent = textArray[textIndex];
             } else {
                 contentDiv.textContent = "Будешь ли ты моей девушкой?";
-                // Запуск музыки после последнего сообщения
-                backgroundMusic.play();
+                backgroundMusic.play(); // Запуск музыки после последнего сообщения
             }
-            // Увеличиваем непрозрачность после изменения текста
             contentDiv.style.opacity = '1';
         }, 500); // Время совпадает с временем перехода непрозрачности в CSS
     });
@@ -59,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    createStars(150); // Создаем 100 звезд
+    createStars(200); // Создаем 200 звезд
 
     // Генерация падающих звезд
     function createFallingStar() {
