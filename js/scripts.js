@@ -18,62 +18,64 @@ document.addEventListener('DOMContentLoaded', function() {
         "И наконец"
     ];
 
-    const contentDiv = document.getElementById('content');
-    const backgroundMusic = document.getElementById('background-music');
     let textIndex = 0;
+    const contentDiv = document.getElementById('content');
+    const orientationMessage = document.getElementById('orientation-message');
+    const backgroundMusic = document.getElementById('background-music');
 
-    // Установить первое сообщение сразу при загрузке страницы
-    contentDiv.textContent = textArray[textIndex];
-
-    document.body.addEventListener('click', () => {
-        contentDiv.style.opacity = '0';
-
-        setTimeout(() => {
-            if (textIndex < textArray.length - 1) {
-                textIndex++;
-                contentDiv.textContent = textArray[textIndex];
-            } else {
-                contentDiv.textContent = "Будешь ли ты моей девушкой?";
-                backgroundMusic.play(); // Запуск музыки после последнего сообщения
-            }
-            contentDiv.style.opacity = '1';
-        }, 500); // Время совпадает с временем перехода непрозрачности в CSS
-    });
-
-    // Генерация случайных звезд
-    function createStars(numStars) {
-        const starsContainer = document.querySelector('.stars');
-        for (let i = 0; i < numStars; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 5 + 2; // Размер звезды от 2 до 7 пикселей
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.top = `${Math.random() * 100}vh`;
-            star.style.left = `${Math.random() * 100}vw`;
-            star.style.animationDuration = `${Math.random() * 1 + 1}s`; // Случайная анимация от 1 до 2 секунд
-            starsContainer.appendChild(star);
+    // Проверка ориентации устройства
+    function checkOrientation() {
+        if (window.innerWidth < window.innerHeight) {
+            // Вертикальная ориентация
+            orientationMessage.style.display = 'flex';
+            contentDiv.style.display = 'none'; // Скрыть контент
+        } else {
+            // Альбомная ориентация
+            orientationMessage.style.display = 'none';
+            contentDiv.style.display = 'block'; // Показать контент
+            startContent(); // Начать отображение контента
         }
     }
 
-    createStars(200); // Создаем 200 звезд
+    // Начать отображение контента
+    function startContent() {
+        contentDiv.textContent = textArray[textIndex];
 
-    // Генерация падающих звезд
-    function createFallingStar() {
-        const fallingStarsContainer = document.querySelector('.falling-stars');
-        const fallingStar = document.createElement('div');
-        fallingStar.className = 'falling-star';
-        fallingStar.style.left = '0'; // Начальное положение слева
-        fallingStar.style.top = `${Math.random() * 50}vh`; // Случайная вертикальная позиция (от 0 до 50% высоты экрана)
-        fallingStar.style.animationDuration = `${Math.random() * 1 + 1}s`; // Случайная длительность падения (от 1 до 2 секунд)
-        fallingStarsContainer.appendChild(fallingStar);
+        document.body.addEventListener('click', () => {
+            fadeOut(contentDiv, () => {
+                if (textIndex < textArray.length - 1) {
+                    textIndex++;
+                    contentDiv.textContent = textArray[textIndex];
+                } else {
+                    contentDiv.textContent = "Будешь ли ты моей девушкой?";
+                    backgroundMusic.play();
+                }
+                fadeIn(contentDiv);
+            });
+        });
 
-        // Удалить падающую звезду после анимации
-        fallingStar.addEventListener('animationend', () => {
-            fallingStar.remove();
+        createStars(200); // Создаем звезды
+        setInterval(createFallingStar, 2000); // Генерируем падающие звезды
+    }
+
+    // Функция плавного исчезновения
+    function fadeOut(element, callback) {
+        element.style.opacity = '0';
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                callback();
+            }, 500);
         });
     }
 
-    // Генерировать падающие звезды каждые 2 секунды
-    setInterval(createFallingStar, 2000);
+    // Функция плавного появления
+    function fadeIn(element) {
+        element.style.opacity = '1';
+    }
+
+    // Событие изменения ориентации
+    window.addEventListener('resize', checkOrientation);
+    checkOrientation(); // Проверка ориентации при загрузке страницы
+
+    // Остальные функции: createStars и createFallingStar
 });
