@@ -89,4 +89,16 @@ function createStars(count) {
     }
 }
 
-// Функция создания падающих
+// Функция создания падающих звезд
+function createFallingStar() {
+    const fallingStarsContainer = document.querySelector('.falling-stars');
+    const fallingStar = document.createElement('div');
+    fallingStar.className = 'falling-star';
+    fallingStar.style.top = `${Math.random() * 100}%`;
+    fallingStar.style.left = `${Math.random() * 100}%`;
+    fallingStarsContainer.appendChild(fallingStar);
+
+    fallingStar.addEventListener('animationend', () => {
+        fallingStarsContainer.removeChild(fallingStar);
+    });
+}
