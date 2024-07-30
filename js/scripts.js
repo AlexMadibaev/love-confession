@@ -23,15 +23,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const orientationMessage = document.getElementById('orientation-message');
     const backgroundMusic = document.getElementById('background-music');
 
+    if (!contentDiv || !backgroundMusic) {
+        console.error('Missing content or background-music element');
+        return;
+    }
+
     // Проверка ориентации устройства
     function checkOrientation() {
         if (window.innerWidth < window.innerHeight) {
-            // Вертикальная ориентация
-            orientationMessage.style.display = 'flex';
+            if (orientationMessage) orientationMessage.style.display = 'flex';
             contentDiv.style.display = 'none'; // Скрыть контент
         } else {
-            // Альбомная ориентация
-            orientationMessage.style.display = 'none';
+            if (orientationMessage) orientationMessage.style.display = 'none';
             contentDiv.style.display = 'block'; // Показать контент
             startContent(); // Начать отображение контента
         }
@@ -54,18 +57,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        createStars(101); // Создаем звезды
-        setInterval(createFallingStar, 2000); // Генерируем падающие звезды
+        if (typeof createStars === 'function') createStars(101); // Создаем звезды
+        if (typeof createFallingStar === 'function') setInterval(createFallingStar, 2000); // Генерируем падающие звезды
     }
 
     // Функция плавного исчезновения
     function fadeOut(element, callback) {
         element.style.opacity = '0';
-        requestAnimationFrame(() => {
-            setTimeout(() => {
-                callback();
-            }, 500);
-        });
+        setTimeout(callback, 500);
     }
 
     // Функция плавного появления
@@ -76,6 +75,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Событие изменения ориентации
     window.addEventListener('resize', checkOrientation);
     checkOrientation(); // Проверка ориентации при загрузке страницы
-
-    // Остальные функции: createStars и createFallingStar
 });
+
+// Функция создания звезд
+function createStars(count) {
+    const starsContainer = document.querySelector('.stars');
+    for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.left = `${Math.random() * 100}%`;
+        starsContainer.appendChild(star);
+    }
+}
+
+// Функция создания падающих
