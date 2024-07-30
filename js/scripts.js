@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    createStars(200); // Создаем 100 звезд
+    createStars(150); // Создаем 100 звезд
 
     // Генерация падающих звезд
     function createFallingStar() {
